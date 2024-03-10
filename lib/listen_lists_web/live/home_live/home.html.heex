@@ -1,0 +1,20 @@
+<h1>ListenLists!</h1>
+
+<div>
+    <.button type="button" class="hover:bg-white hover:text-black hover:border-black hover:border" phx-click={show_modal("new-listen_list-modal")}>Create ListenList</.button>
+    <.modal id="new-listen_list-modal">
+        <.simple_form for={@form} phx-submit="create-listen_list">
+            <.input field={@form[:name]} type="text" label="Name" required/>
+            <.input field={@form[:description]} type="text" label="Description" required/>
+            <.input field={@form[:password]} type="text" label="Password" required/>
+            <.button type="submit" phx-disable-with="Saving ...">Create ListenList</.button>
+        </.simple_form>
+    </.modal>
+    <button phx-click="join_or_enter" phx-value-list={listen_list.id} :for={{dom_id, listen_list} <- @streams.listen_lists} id={dom_id}
+        class="flex text-left w-full h-full flex-col rounded border border-black hover:bg-black hover:text-white">
+        <p> Name: <%= listen_list.name %> </p>
+        <p> Description: <%= listen_list.description %> </p>
+        <p> Number of Listeners: <%= length(listen_list.users) %> </p>
+        <p> Created At: <%= listen_list.inserted_at %> </p>
+    </button>
+</div>
