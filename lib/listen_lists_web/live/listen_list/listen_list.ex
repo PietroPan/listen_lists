@@ -5,12 +5,14 @@ defmodule ListenListsWeb.ListenListLive.ListenList do
   @impl true
   def mount(params, _session, socket) do
     ll = ListenLists.ListenListss.get_listen_list!(params["listen_list_id"])
+    ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(ll.id)
     socket =
       socket
       |> assign(form: to_form(%{}))
       |> assign(token: "")
       |> assign(query: "")
       |> assign(listen_list: ll)
+      |> stream(:ll_albums, ll_albums)
       |> stream(:albums, [])
     {:ok, socket}
   end
@@ -35,7 +37,7 @@ defmodule ListenListsWeb.ListenListLive.ListenList do
           name = x["name"]
           album_url = x["external_urls"]["spotify"]
           image_url = x["images"]
-          |> Enum.at(1)
+          |> Enum.at(0)
           |> Access.get("url")
           %{id: id, name: name,album_url: album_url,image_url: image_url} end)
         Logger.debug "Response: #{inspect(r)}"
@@ -53,10 +55,14 @@ defmodule ListenListsWeb.ListenListLive.ListenList do
     {:noreply, socket}
   end
 
+
   @impl true
-  def handle_event("search_album", _params, socket) do
+  def handle_event("add_album", params, socket) do
     # Handle the search event here
-    Logger.info "NOT HERE"
+    socket = case ListenLists.Albums.add_to_listen_list(%{name: params["name"], image_url: params["image"], spotify_id: params["id"], album_url: params["url"]},params["listen_list_id"]) do
+      {:ok, _} -> socket |> put_flash(:info, "Album added successfully")
+      {:error, :album_already_added} -> socket |> put_flash(:error, "The album is already in the list")
+    end
     {:noreply, socket}
   end
 

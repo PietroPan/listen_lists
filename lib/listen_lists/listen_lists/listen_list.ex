@@ -3,6 +3,7 @@ defmodule ListenLists.ListenLists.ListenList do
   import Ecto.Changeset
   alias ListenLists.Accounts.User
   alias ListenLists.UsersListenLists
+  alias ListenList.AlbumListenLists.AlbumListenList
 
   schema "listen_lists" do
     field :name, :string
@@ -10,6 +11,8 @@ defmodule ListenLists.ListenLists.ListenList do
     field :password, :string
     field :image_path, :string
     many_to_many(:users, User, join_through: UsersListenLists, on_replace: :delete)
+    many_to_many(:albums, Album, join_through: AlbumListenList, on_replace: :delete)
+
 
     timestamps()
   end

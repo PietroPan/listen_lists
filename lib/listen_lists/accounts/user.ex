@@ -3,12 +3,14 @@ defmodule ListenLists.Accounts.User do
   import Ecto.Changeset
   alias ListenLists.ListenLists.ListenList
   alias ListenLists.UsersListenLists
+  alias ListenLists.Reviews.Review
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    has_many :reviews, Review
     many_to_many(:listen_lists, ListenList, join_through: UsersListenLists, on_replace: :delete)
 
     timestamps()
