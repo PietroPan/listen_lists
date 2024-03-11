@@ -12,6 +12,7 @@ defmodule ListenListsWeb.JoinListenListLive.JoinListenList do
     {:ok, socket}
   end
 
+  @impl true
   def handle_event("join_listen_list", params, socket) do
     %{current_user: user, listen_list: ll} = socket.assigns
     Logger.debug "HAHAHAHAH: #{inspect(params)}"
