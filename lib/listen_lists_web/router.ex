@@ -68,6 +68,7 @@ defmodule ListenListsWeb.Router do
       on_mount: [{ListenListsWeb.UserAuth, :ensure_authenticated}] do
       live "/home", HomeLive.Home, :index
       live "/join/:listen_list_id", JoinListenListLive.JoinListenList, :index
+      live "/album/:album_id", AlbumLive.Album, :index
       live "/listen_list/:listen_list_id", ListenListLive.ListenList, :index
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

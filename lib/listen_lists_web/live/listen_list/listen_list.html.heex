@@ -38,7 +38,7 @@
 
         <div class="p-4 flex-grow">
             <!-- Album Title (Link) -->
-            <a href={album.album.album_url} class="block text-xl font-semibold text-gray-800 hover:text-blue-600 truncate text-center" title="Album Title"><%= album.album.name %></a>
+            <a href={~p"/album/#{album.album.id}"} class="block text-xl font-semibold text-gray-800 hover:text-blue-600 truncate text-center" title="Album Title"><%= album.album.name %></a>
 
             <!-- Clear floats -->
             <div class="clearfix"></div>
