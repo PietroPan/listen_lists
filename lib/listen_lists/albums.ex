@@ -66,14 +66,18 @@ defmodule ListenLists.Albums do
     query =
       from u in query,
       join: r in Review, on: r.user_id == u.user_id,
+      where: r.album_id == ^album_id,
       select: r
     reviews = Repo.all(query)
 
-    ratings =
-      reviews
-      |> Enum.map(fn x -> x.rating end)
-
-    {reviews |> Repo.preload(:user), Float.round(Enum.sum(ratings)/length(ratings),2)}
+    case reviews do
+      [] -> {[],0.0}
+      _ ->
+        ratings =
+          reviews
+          |> Enum.map(fn x -> x.rating end)
+        {reviews |> Repo.preload(:user), Float.round(Enum.sum(ratings)/length(ratings),2)}
+    end
   end
 
 
