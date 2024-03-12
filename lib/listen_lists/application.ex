@@ -17,9 +17,10 @@ defmodule ListenLists.Application do
       # Start Finch
       {Finch, name: ListenLists.Finch},
       # Start the Endpoint (http/https)
-      ListenListsWeb.Endpoint
+      ListenListsWeb.Endpoint,
       # Start a worker by calling: ListenLists.Worker.start_link(arg)
       # {ListenLists.Worker, arg}
+      ListenLists.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

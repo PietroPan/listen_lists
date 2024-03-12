@@ -105,4 +105,50 @@ defmodule ListenLists.ListenListss do
     Repo.all(query)
     |> Enum.map(fn x -> x |> Ecto.Changeset.change(revealed: false) |> Repo.update() end)
   end
+
+  def activate_listen_list(ll_id, days_between_reveals, reveal_album) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(days_between_reveals: days_between_reveals, days_till_reveal: days_between_reveals, active: true)
+    |> Repo.update()
+    if reveal_album do reveal_next_album(ll_id) end
+  end
+
+  def deactivate_listen_list(ll_id) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(active: false)
+    |> Repo.update()
+  end
+
+  def reveal_albums() do
+    query =
+      from l in ListenList,
+      where: l.active == true,
+      select: l
+    Repo.all(query)
+    |> Enum.map(fn list ->
+      n_days_till_reveal = list.days_till_reveal - 1
+      changeset = cond do
+        n_days_till_reveal == 0 ->
+          case reveal_next_album(list.id) do
+            {:error, :no_more_albums_to_reveal} ->
+              list
+              |> Ecto.Changeset.change(days_till_reveal: list.days_between_reveals, active: false)
+            _ ->
+              list
+              |> Ecto.Changeset.change(days_till_reveal: list.days_between_reveals)
+          end
+        true ->
+          list
+          |> Ecto.Changeset.change(days_till_reveal: n_days_till_reveal)
+      end
+      Repo.update(changeset)
+    end)
+  end
+
+  def all_lists() do
+    query =
+      from l in ListenList,
+      select: l
+    Repo.all(query)
+  end
 end

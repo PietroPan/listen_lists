@@ -2,9 +2,7 @@ defmodule ListenLists.Albums do
   alias ListenLists.Repo
 
   alias ListenLists.Albums.Album
-  alias ListenLists.Accounts.User
   alias ListenLists.AlbumsListenLists
-  alias ListenLists.AlbumsListenLists.AlbumListenList
   alias ListenLists.Reviews.Review
   alias ListenLists.UsersListenLists
   import Ecto.Query

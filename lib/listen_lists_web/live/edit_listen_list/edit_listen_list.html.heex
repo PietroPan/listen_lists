@@ -10,6 +10,14 @@
     </div>
 </.simple_form>
 
+<.simple_form for={@form} phx-submit="start_list" phx-value-id={@listen_list.id}>
+    <div  class="flex items-center space-x-4 my-5">
+        <.input field={@form[:days_between]} type="number" min="1" step="1" placeholder="Days beetween reveals (1 = every day)" class="flex" required/>
+        <.input field={@form[:reveal_album]} type="checkbox" label="Reveal first album now?"/>
+        <.button type="submit" phx-disable-with="Starting...">Start</.button>
+    </div>
+</.simple_form>
+
 <div id="search_result" phx-update="stream">
     <div :for={{dom_id, album} <- @streams.albums} id={dom_id} class="max-w-screen-md bg-white shadow-lg rounded-lg overflow-hidden items-center border border-black">
     <!-- Album Image -->
