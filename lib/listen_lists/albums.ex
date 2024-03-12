@@ -2,7 +2,11 @@ defmodule ListenLists.Albums do
   alias ListenLists.Repo
 
   alias ListenLists.Albums.Album
+  alias ListenLists.Accounts.User
   alias ListenLists.AlbumsListenLists
+  alias ListenLists.AlbumsListenLists.AlbumListenList
+  alias ListenLists.Reviews.Review
+  alias ListenLists.UsersListenLists
   import Ecto.Query
 
   def create_album(attrs \\ %{}) do
@@ -42,6 +46,48 @@ defmodule ListenLists.Albums do
       true ->
         {:ok, AlbumsListenLists.create_album_listen_list(%{album_id: album_id, listen_list_id: listen_list_id})}
     end
+  end
+
+  def get_reviews(album_id) do
+    query =
+      from r in Review,
+      where: r.album_id == ^album_id,
+      select: r,
+      order_by: [desc: :inserted_at],
+      preload: [:user]
+    Repo.all(query)
+  end
+
+  def get_list_reviews(album_id, ll_id) do
+    query =
+      from u in UsersListenLists,
+      where: u.listen_list_id == ^ll_id
+
+    query =
+      from u in query,
+      join: r in Review, on: r.user_id == u.user_id,
+      select: r
+    reviews = Repo.all(query)
+
+    ratings =
+      reviews
+      |> Enum.map(fn x -> x.rating end)
+
+    {reviews |> Repo.preload(:user), Float.round(Enum.sum(ratings)/length(ratings),2)}
+  end
+
+
+  #ListenLists.Albums.get_list_reviews(3,10)
+
+  def calculate_album_rating(album_id) do
+    query =
+      from r in Review,
+      where: r.album_id == ^album_id,
+      select: r.rating
+    ratings = Repo.all(query)
+    get_album!(album_id)
+    |> Ecto.Changeset.change(rating: Float.round(Enum.sum(ratings)/length(ratings),2))
+    |> Repo.update()
   end
 
 end

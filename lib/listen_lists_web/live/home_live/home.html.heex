@@ -15,6 +15,6 @@
         <p> Name: <%= listen_list.name %> </p>
         <p> Description: <%= listen_list.description %> </p>
         <p> Number of Listeners: <%= length(listen_list.users) %> </p>
-        <p> Created At: <%= listen_list.inserted_at %> </p>
+        <p> Created At: <%= ListenLists.handle_date(listen_list.inserted_at) %> </p>
     </button>
 </div>

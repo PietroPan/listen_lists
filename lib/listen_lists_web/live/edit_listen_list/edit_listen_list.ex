@@ -1,4 +1,4 @@
-defmodule ListenListsWeb.ListenListLive.ListenList do
+defmodule ListenListsWeb.EditListenListLive.EditListenList do
   use ListenListsWeb, :live_view
   require Logger
 
@@ -64,6 +64,26 @@ defmodule ListenListsWeb.ListenListLive.ListenList do
       {:error, :album_already_added} -> socket |> put_flash(:error, "The album is already in the list")
     end
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("reveal_album", params, socket) do
+    r = ListenLists.ListenListss.reveal_next_album(params["id"])
+    socket = case r do
+      {:error, _} -> socket |> put_flash(:error, "No more albums to be revealed!")
+      {:ok, _} -> socket |> put_flash(:info, "Next Album Revealed!")
+    end
+    ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["id"])
+
+    {:noreply, socket |> stream(:ll_albums, ll_albums)}
+  end
+
+  @impl true
+  def handle_event("restart_list", params, socket) do
+    ListenLists.ListenListss.restart_list(params["id"])
+    ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["id"])
+
+    {:noreply, socket |> put_flash(:info, "Restarted Successfully") |> stream(:ll_albums, ll_albums)}
   end
 
 end

@@ -1,20 +1,22 @@
-defmodule ListenListsWeb.AlbumLive.Album do
+defmodule ListenListsWeb.ListenListLive.ListenList do
   use ListenListsWeb, :live_view
   require Logger
 
-
   @impl true
   def mount(params, _session, socket) do
-    album = ListenLists.Albums.get_album!(params["album_id"])
-    reviews = ListenLists.Albums.get_reviews(album.id)
-    Logger.debug "Reviews: #{inspect(reviews)}"
+    ll = ListenLists.ListenListss.get_listen_list!(params["listen_list_id"])
+    {_, current_album} = ListenLists.ListenListss.get_current_album(params["listen_list_id"])
+    {t_reviews, rating} = ListenLists.Albums.get_list_reviews(current_album.album.id,ll.id)
     socket =
       socket
       |> assign(form: %{})
-      |> assign(album: album)
-      |> assign(reviews_num: length(reviews))
-      |> stream(:reviews, reviews)
-    {:ok, socket}
+      |> assign(listen_list: ll)
+      |> assign(current_album: current_album)
+      |> assign(reviews_num: length(t_reviews))
+      |> assign(rating: rating)
+      |> stream(:reviews, t_reviews)
+
+      {:ok, socket}
   end
 
   @impl true

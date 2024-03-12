@@ -1,6 +1,7 @@
 defmodule ListenLists.ListenListss do
   alias ListenLists.ListenLists.ListenList
   alias ListenLists.UsersListenLists
+  alias ListenLists.AlbumsListenLists.AlbumListenList
 
   alias ListenLists.Repo
   import Ecto.Query
@@ -51,5 +52,57 @@ defmodule ListenLists.ListenListss do
     |> Repo.insert()
   end
 
+  def get_current_album(ll_id) do
+    query =
+      from a in AlbumListenList,
+      where: a.listen_list_id == ^ll_id and a.is_current_album,
+      select: a,
+      preload: [:album]
+    current_album = Repo.one(query)
+    case current_album do
+      nil -> {:error, :no_album_revealed}
+      _ -> {:ok, current_album}
+    end
+  end
 
+  def reveal_next_album(ll_id) do
+    query =
+      from a in AlbumListenList,
+      where: a.listen_list_id == ^ll_id and a.revealed == false,
+      select: a
+    albums = Repo.all(query)
+    case albums do
+      [] -> {:error, :no_more_albums_to_reveal}
+      _ ->
+        {_, current_album} = get_current_album(ll_id)
+        if current_album != :no_album_revealed do
+          current_album
+          |> Ecto.Changeset.change(is_current_album: false)
+          |> Repo.update()
+        end
+
+        album =
+          albums
+          |> Enum.random()
+          |> Ecto.Changeset.change(revealed: true, is_current_album: true)
+          |> Repo.update()
+        {:ok, album}
+    end
+  end
+
+  def restart_list(ll_id) do
+    {_, current_album} = get_current_album(ll_id)
+    if current_album != :no_album_revealed do
+      current_album
+      |> Ecto.Changeset.change(is_current_album: false)
+      |> Repo.update()
+    end
+
+    query =
+      from a in AlbumListenList,
+      where: a.listen_list_id == ^ll_id and a.revealed == true,
+      select: a
+    Repo.all(query)
+    |> Enum.map(fn x -> x |> Ecto.Changeset.change(revealed: false) |> Repo.update() end)
+  end
 end

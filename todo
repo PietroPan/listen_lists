@@ -1,6 +1,5 @@
 add artists names and links to search
-button to start recommending
-add bool and time for listen list
-create main ll page with recommended album
-work on reviews
+add automatic recommending
 protect routes to listen_lists
+add navbar
+change user_name

@@ -52,7 +52,8 @@ defmodule ListenLists.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:dotenv, "~> 3.0.0"},
-      {:httpoison, "~> 2.2.1"}
+      {:httpoison, "~> 2.2.1"},
+      {:calendar, "~> 1.0.0"}
     ]
   end
 

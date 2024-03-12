@@ -7,7 +7,7 @@ defmodule ListenLists.Reviews.Review do
 
   schema "reviews" do
     field :comment, :string
-    field :rating, :integer
+    field :rating, :float
     belongs_to :user, User
     belongs_to :album, Album
 

@@ -1,15 +1,21 @@
-<div class="flex flex-col items-center">
-    <a href={@album.album_url} class="text-5xl font-semibold py-5 hover:underline"> <%= @album.name%> </a>
-    <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
-    <img src={@album.image_url} alt="Album Cover" class="py-5 rounded-lg shadow-xl dark:shadow-gray-800">
-    <h1 class="text-2xl pt-10 font-semibold"> Rating: <%= @album.rating %> </h1>
-</div>
+<h1 class="text-xl font-semibold">Your ListenList: <%= @listen_list.name%> </h1>
+
+<%= if @current_album != :no_album_revealed do %>
+    <div class="flex flex-col items-center">
+        <a href={@current_album.album.album_url} class="text-5xl font-semibold py-5 hover:underline"> <%= @current_album.album.name%> </a>
+        <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+        <img src={@current_album.album.image_url} alt="Album Cover" class="py-5 rounded-lg shadow-xl dark:shadow-gray-800">
+        <h1 class="text-2xl pt-10 font-semibold"> Rating: <%= @rating %> </h1>
+    </div>
+<% else %>
+<h1 class="text-xl font-semibold py-6">You Haven't started revealing albums yet :( </h1>
+<% end %>
 
 <div class="pt-36 pb-12">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-900 ">Reviews (<%= @reviews_num %>)</h2>
     </div>
-    <.form class="mb-6" for={@form} phx-submit="add_review" phx-value-album_id={@album.id}>
+    <.form class="mb-6" for={@form} phx-submit="add_review" phx-value-album_id={@current_album.album.id}>
         <.input type="textarea" placeholder="Write a Review..." rows="6" name="comment" value={@form[:comment]}></.input>
 
         <.input name="rating" value={@form[:rating]} type="number" max="10" min="1" step="0.5" placeholder="1..10"></.input>
@@ -21,8 +27,6 @@
         </.button>
     </.form>
 </div>
-
-
 
 <div id="reviews" phx-update="stream" class="">
   <div :for={{dom_id, review} <- @streams.reviews} id={dom_id} class="border py-10 bg-white rounded-lg shadow-md p-4">

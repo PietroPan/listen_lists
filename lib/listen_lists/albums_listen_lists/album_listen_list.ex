@@ -7,6 +7,8 @@ defmodule ListenLists.AlbumsListenLists.AlbumListenList do
 
   schema "albums_listen_lists" do
 
+    field :revealed, :boolean, default: false
+    field :is_current_album, :boolean, default: false
     belongs_to :album, Album, primary_key: true
     belongs_to :listen_list, ListenList, primary_key: true
 

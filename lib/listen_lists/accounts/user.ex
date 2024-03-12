@@ -10,10 +10,17 @@ defmodule ListenLists.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :username, :string
     has_many :reviews, Review
     many_to_many(:listen_lists, ListenList, join_through: UsersListenLists, on_replace: :delete)
 
     timestamps()
+  end
+
+  def name_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_required([:username])
   end
 
   @doc """
