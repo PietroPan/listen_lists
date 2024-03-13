@@ -1,4 +1,5 @@
 defmodule ListenListsWeb.UserAuth do
+  require Logger
   use ListenListsWeb, :verified_routes
 
   import Plug.Conn
@@ -169,6 +170,22 @@ defmodule ListenListsWeb.UserAuth do
       {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
     else
       {:cont, socket}
+    end
+  end
+
+  def on_mount(:list_belongs_to_user, params, _session, socket) do
+    %{current_user: user} = socket.assigns
+    Logger.debug "ROUTS: #{inspect({params})}"
+    cond do
+      ListenLists.ListenListss.check_if_user_belongs(user.id,params["listen_list_id"]) ->
+        {:cont, socket}
+      true ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You don't belong to this list.")
+          |> Phoenix.LiveView.redirect(to: ~p"/home")
+
+        {:halt, socket}
     end
   end
 

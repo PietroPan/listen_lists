@@ -68,7 +68,7 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
     {:noreply, socket}
   end
 
-  @imps true
+  @impl true
   def handle_event("remove_album", params, socket) do
     ListenLists.AlbumsListenLists.delete_album_listen_list(params["id"],params["listen_list_id"])
     ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["listen_list_id"])

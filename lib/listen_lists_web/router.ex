@@ -69,10 +69,18 @@ defmodule ListenListsWeb.Router do
       live "/home", HomeLive.Home, :index
       live "/join/:listen_list_id", JoinListenListLive.JoinListenList, :index
       live "/album/:album_id", AlbumLive.Album, :index
-      live "/listen_list/:listen_list_id/edit", EditListenListLive.EditListenList, :index
-      live "/listen_list/:listen_list_id", ListenListLive.ListenList, :index
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
+  end
+
+  scope "/", ListenListsWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :list_belongs_to_user,
+    on_mount: [{ListenListsWeb.UserAuth, :ensure_authenticated},{ListenListsWeb.UserAuth, :list_belongs_to_user}] do
+      live "/listen_list/:listen_list_id/edit", EditListenListLive.EditListenList, :index
+      live "/listen_list/:listen_list_id", ListenListLive.ListenList, :index
     end
   end
 
