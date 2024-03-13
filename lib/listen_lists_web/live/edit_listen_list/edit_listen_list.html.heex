@@ -4,18 +4,18 @@
 <.button hidden phx-click="restart_list" phx-value-id={@listen_list.id} >Restart Revealing</.button>
 <.button phx-click={JS.navigate(~p"/listen_list/#{@listen_list.id}")} >Front Page</.button>
 
-<.simple_form for={@form} phx-submit="search_album">
-    <div  class="flex items-center space-x-4 my-5">
-        <.input field={@form[:query]} type="text" placeholder="Search Album..." class="flex" required/>
-        <.button type="submit" phx-disable-with="Searching ...">Search</.button>
-    </div>
-</.simple_form>
-
 <.simple_form for={@form} phx-submit="start_list" phx-value-id={@listen_list.id}>
     <div  class="flex items-center space-x-4 my-5">
         <.input field={@form[:days_between]} type="number" min="1" step="1" placeholder="Days beetween reveals" class="flex" required/>
         <.input field={@form[:reveal_album]} type="checkbox" label="Reveal first album now?"/>
-        <.button type="submit" phx-disable-with="Starting...">Start</.button>
+        <.button type="submit" phx-disable-with="Starting...">Start Revealing Albums</.button>
+    </div>
+</.simple_form>
+
+<.simple_form for={@form} phx-submit="search_album">
+    <div  class="flex items-center space-x-4 my-5">
+        <.input field={@form[:query]} type="text" placeholder="Search Album..." class="flex" required/>
+        <.button type="submit" phx-disable-with="Searching ...">Search</.button>
     </div>
 </.simple_form>
 
