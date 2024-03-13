@@ -29,7 +29,7 @@
     <div :for={{dom_id, review} <- @streams.reviews} id={dom_id} class="border py-10 bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <!-- User Name -->
-            <div class="text-lg font-semibold"> <%= review.user.email %> </div>
+            <div class="text-lg font-semibold"> <%= review.user.username %> </div>
             <div class="text-gray-500 text-sm"><%= ListenLists.handle_date(review.inserted_at) %></div>
 
             <!-- Rating -->

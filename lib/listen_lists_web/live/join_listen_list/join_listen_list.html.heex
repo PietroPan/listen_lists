@@ -1,5 +1,5 @@
 <h1>Join <%= @listen_list.name%> ? </h1>
 <.simple_form for={@form} phx-submit="join_listen_list">
-    <.input field={@form[:pass]} type="text" label="Password" required/>
+    <.input field={@form[:pass]} type="password" label="Password" required/>
     <.button type="submit" phx-disable-with="Saving ...">Join ListenList</.button>
 </.simple_form>
