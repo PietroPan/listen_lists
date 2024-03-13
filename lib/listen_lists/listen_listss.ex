@@ -38,6 +38,17 @@ defmodule ListenLists.ListenListss do
     Repo.all(query)
   end
 
+  def list_your_listen_lists(user_id) do
+    query =
+      from l in ListenList,
+      join: u in UsersListenLists, on: u.listen_list_id == l.id,
+      select: l,
+      where: u.user_id == ^user_id,
+      order_by: [desc: :inserted_at],
+      preload: [:users]
+    Repo.all(query)
+  end
+
   def check_if_user_belongs(user_id,ll_id) do
     query =
       from l in UsersListenLists,

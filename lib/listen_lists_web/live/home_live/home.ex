@@ -4,11 +4,14 @@ defmodule ListenListsWeb.HomeLive.Home do
 
   @impl true
   def mount(_params, _session, socket) do
+    %{current_user: user} = socket.assigns
     socket =
       socket
       |> assign(list_id: "0")
       |> assign(list_name: "default")
       |> assign(form: to_form(%{}))
+      |> assign(show_yours: false)
+      |> stream(:your_listen_lists, ListenLists.ListenListss.list_your_listen_lists(user.id))
       |> stream(:listen_lists, ListenLists.ListenListss.list_listen_lists())
 
     {:ok, socket}

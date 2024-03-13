@@ -1,7 +1,8 @@
-<h1>ListenLists!</h1>
-
 <div>
-    <.button type="button" class="hover:bg-white hover:text-black hover:border-black hover:border" phx-click={show_modal("new-listen_list-modal")}>Create ListenList</.button>
+    <.button type="button" class="hover:bg-white hover:text-black hover:border-black hover:border" phx-click={show_modal("new-listen_list-modal")}>Create New ListenList</.button>
+
+    <h1 class="text-xl font-semibold py-6"> Your ListenLists: </h1>
+
     <.modal id="new-listen_list-modal">
         <.simple_form for={@form} phx-submit="create-listen_list">
             <.input field={@form[:name]} type="text" label="Name" required/>
@@ -10,11 +11,54 @@
             <.button type="submit" phx-disable-with="Saving ...">Create ListenList</.button>
         </.simple_form>
     </.modal>
-    <button phx-click="join_or_enter" phx-value-list={listen_list.id} :for={{dom_id, listen_list} <- @streams.listen_lists} id={dom_id}
-        class="flex text-left w-full h-full flex-col rounded border border-black hover:bg-black hover:text-white">
-        <p> Name: <%= listen_list.name %> </p>
-        <p> Description: <%= listen_list.description %> </p>
-        <p> Number of Listeners: <%= length(listen_list.users) %> </p>
-        <p> Created At: <%= ListenLists.handle_date(listen_list.inserted_at) %> </p>
+    <button phx-click="join_or_enter" phx-value-list={listen_list.id} :for={{dom_id, listen_list} <- @streams.your_listen_lists} id={dom_id} 
+        class="w-full mx-auto bg-slate-200 border border-black shadow-lg hover:bg-slate-50 rounded-lg overflow-hidden">
+        <div class="px-6 pt-4">
+            <!-- Name at the top -->
+            <div class="font-bold text-xl mb-2"><%= listen_list.name %> </div>
+            <!-- Description in the middle -->
+            <p class="text-gray-700 text-base text-left">
+            <%= listen_list.description %>
+            </p>
+        </div>
+        <hr class="w-full h-px bg-gray-100 border-0 rounded my-4 dark:bg-gray-700">
+        <div class="flex flex-row justify-between px-6">
+            <!-- Created at and number of listeners at the bottom -->
+            <p class="text-gray-600 text-sm text-left">
+            Listeners: <%= length(listen_list.users) %>
+            </p>
+            <p class="text-gray-600 text-sm text-right">
+            Created At: <%= ListenLists.handle_date(listen_list.inserted_at) %>
+            </p>
+        </div>
     </button>
+
+    <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+    <h1 class="text-xl font-semibold py-6"> Join a ListenList: </h1>
+
+    
+    <button phx-click="join_or_enter" phx-value-list={listen_list.id} :for={{dom_id, listen_list} <- @streams.listen_lists} id={dom_id} 
+        class="w-full mx-auto bg-slate-200 border border-black shadow-md hover:bg-slate-50 rounded-lg overflow-hidden">
+        <div class="px-6 pt-4">
+            <!-- Name at the top -->
+            <div class="font-bold text-xl mb-2"><%= listen_list.name %> </div>
+            <!-- Description in the middle -->
+            <p class="text-gray-700 text-base text-left">
+            <%= listen_list.description %>
+            </p>
+        </div>
+        <hr class="w-full h-px bg-gray-100 border-0 rounded my-4 dark:bg-gray-700">
+        <div class="flex flex-row justify-between px-6">
+            <!-- Created at and number of listeners at the bottom -->
+            <p class="text-gray-600 text-sm text-left">
+            Listeners: <%= length(listen_list.users) %>
+            </p>
+            <p class="text-gray-600 text-sm text-right">
+            Created At: <%= ListenLists.handle_date(listen_list.inserted_at) %>
+            </p>
+        </div>
+    </button>
+
+
+
 </div>
