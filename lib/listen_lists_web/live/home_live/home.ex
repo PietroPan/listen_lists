@@ -33,7 +33,7 @@ defmodule ListenListsWeb.HomeLive.Home do
     socket = cond do
       ListenLists.ListenListss.check_if_user_belongs(user.id,params["list"]) ->
         socket
-        |> push_navigate(to: ~p"/listen_list/#{params["list"]}/edit")
+        |> push_navigate(to: ~p"/listen_list/#{params["list"]}")
       true ->
         socket
         |> push_navigate(to: ~p"/join/#{params["list"]}")

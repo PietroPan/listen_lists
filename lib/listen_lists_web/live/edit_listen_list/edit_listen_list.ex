@@ -60,10 +60,19 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def handle_event("add_album", params, socket) do
     # Handle the search event here
     socket = case ListenLists.Albums.add_to_listen_list(%{name: params["name"], image_url: params["image"], spotify_id: params["id"], album_url: params["url"]},params["listen_list_id"]) do
-      {:ok, _} -> socket |> put_flash(:info, "Album added successfully")
+      {:ok, _} ->
+        ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["listen_list_id"])
+        socket |> put_flash(:info, "Album added successfully") |> stream(:ll_albums, ll_albums, reset: true)
       {:error, :album_already_added} -> socket |> put_flash(:error, "The album is already in the list")
     end
     {:noreply, socket}
+  end
+
+  @imps true
+  def handle_event("remove_album", params, socket) do
+    ListenLists.AlbumsListenLists.delete_album_listen_list(params["id"],params["listen_list_id"])
+    ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["listen_list_id"])
+    {:noreply, socket |> put_flash(:info, "Album removed successfully") |> stream(:ll_albums, ll_albums, reset: true)}
   end
 
   @impl true
@@ -74,7 +83,6 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
       {:ok, _} -> socket |> put_flash(:info, "Next Album Revealed!")
     end
     ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["id"])
-
     {:noreply, socket |> stream(:ll_albums, ll_albums)}
   end
 

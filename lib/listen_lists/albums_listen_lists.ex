@@ -9,6 +9,22 @@ defmodule ListenLists.AlbumsListenLists do
     |> Repo.insert()
   end
 
+  def delete_album_listen_list(album_id,ll_id) do
+    query = from a in AlbumListenList,
+      where: a.album_id == ^album_id and a.listen_list_id == ^ll_id,
+      select: a
+    entry = Repo.one(query)
+    Repo.delete(entry)
+  end
+
+  def get_album_listen_list(album_id,ll_id) do
+    query = from a in AlbumListenList,
+      where: a.album_id == ^album_id and a.listen_list_id == ^ll_id,
+      select: a,
+      preload: [:album]
+    entry = Repo.one(query)
+  end
+
   def check_if_album_belongs(album_id,ll_id) do
     query =
       from a in AlbumListenList,

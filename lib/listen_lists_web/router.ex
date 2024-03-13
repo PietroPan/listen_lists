@@ -38,7 +38,7 @@ defmodule ListenListsWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through [:browser, :redirect_if_user_is_authenticated]
 
       live_dashboard "/dashboard", metrics: ListenListsWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview

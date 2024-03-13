@@ -4,14 +4,52 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
-      <%= assigns[:page_title] || "ListenLists" %>
-    </.live_title>
+    <.live_title> ListenLists </.live_title>
+    <link rel="icon" type="image/x-icon" href={~p"/favicon.ico"}>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
   <body class="bg-white antialiased">
+  
+  <nav class="bg-black p-4">
+    <div class="flex items-center justify-between">
+      <!-- Left section with icon -->
+      <div class="flex items-center">
+      <a href="/" class="px-2">
+        <img src={~p"/images/logo.svg"} width="36" />
+      </a>
+        <span class="text-white">ListenLists</span>
+      </div>
+
+      <%= if @current_user do %>
+      <!-- Right section with links -->
+      <div class="flex items-center">
+        
+        <h1 class="text-white mr-4 leading-6">
+          <%= @current_user.email %>
+        </h1>
+
+        <!-- Settings link -->
+        <a href={~p"/users/settings"} class="text-white mr-4 hover:text-red-500 underline">Settings</a>
+        
+        <!-- Log out link -->
+        <a href={~p"/users/log_out"} class="text-white hover:text-red-500 underline">Log out</a>
+      </div>
+      <% else %>
+      <!-- Right section with links -->
+      <div class="flex items-center">
+        <!-- Settings link -->
+        <a href={~p"/users/register"} class="text-white mr-4 hover:text-red-500 underline">Register</a>
+        
+        <!-- Log out link -->
+        <a href={~p"/users/log_in"} class="text-white hover:text-red-500 underline">Log In</a>
+      </div>
+      <% end %>
+    </div>
+  </nav>
+
+    <!--
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
@@ -53,6 +91,7 @@
         </li>
       <% end %>
     </ul>
+    -->
     <%= @inner_content %>
   </body>
 </html>
