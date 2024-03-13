@@ -43,16 +43,17 @@
 
 <h1 class="text-xl font-semibold my-5"> Albums in your List </h1>
 
-<div id="search_result" phx-update="stream">
+<div id="list_albums" phx-update="stream">
     <div :for={{dom_id, album} <- @streams.ll_albums} id={dom_id}>
         <%= if album.revealed do %>
         <div class="max-w-screen-md shadow-lg rounded-lg overflow-hidden items-center border border-black bg-green-200">
             <!-- Album Image -->
+            <p><a href={~p"/album/#{album.album.id}"}>
             <img src={album.album.image_url} alt="Album Cover" class="w-32 h-32 object-cover object-center float-left">
-
+            </a></p>
             <div class="p-4 flex-grow">
                 <!-- Album Title (Link) -->
-                <a href={~p"/album/#{album.album.id}"} class="block text-xl font-semibold text-gray-800 hover:text-blue-600 truncate text-center" title="Album Title"><%= album.album.name %></a>
+                <a href={album.album.album_url} class="hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
 
                 <!-- Clear floats -->
                 <div class="clearfix"></div>
@@ -61,11 +62,13 @@
         <% else %>
         <div class="max-w-screen-md shadow-lg rounded-lg overflow-hidden items-center border border-black bg-gray-400">
             <!-- Album Image -->
+            <p><a href={~p"/album/#{album.album.id}"}>
             <img src={album.album.image_url} alt="Album Cover" class="w-32 h-32 object-cover object-center float-left">
+            </a></p>
 
             <div class="p-4 flex-grow">
                 <!-- Album Title (Link) -->
-                <a href={~p"/album/#{album.album.id}"} class="block text-xl font-semibold text-gray-800 hover:text-blue-600 truncate text-center" title="Album Title"><%= album.album.name %></a>
+                <a href={album.album.album_url} class="hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
 
                 <!-- Minus Sign -->
                 <button phx-click="remove_album" phx-value-listen_list_id={@listen_list.id} phx-value-id={album.album.id} class="float-right bg-black rounded-full p-2">
