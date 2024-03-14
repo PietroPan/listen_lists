@@ -22,14 +22,14 @@
 -->
 
 <.simple_form for={@form} phx-submit="change_days" phx-value-id={@listen_list.id}>
-    <div class="flex">
+    <div class="flex bg-amber-50">
         <.input class="w-2" field={@form[:days_between]} type="number" min="1" step="1" placeholder="1 = everday" required/>
         <.button type="submit" phx-disable-with="Updating...">Change Days Between Reveals</.button>  
     </div>
 </.simple_form>
 
 <.simple_form for={@form} phx-submit="search_album">
-    <div  class="flex items-center space-x-4 my-5">
+    <div  class="bg-amber-50 flex items-center space-x-4 my-5">
         <.input field={@form[:query]} type="text" placeholder="Search Album..." class="flex" required/>
         <.button type="submit" phx-disable-with="Searching ...">Search</.button>
     </div>

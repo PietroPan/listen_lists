@@ -6,7 +6,7 @@
         <a href={@current_album.album.album_url} class="text-5xl font-semibold py-5 hover:underline"> <%= @current_album.album.name%> </a>
         <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
         <p><a href={~p"/album/#{@current_album.album.id}"}>
-        <img src={@current_album.album.image_url} alt="Album Cover" class="py-5 rounded-lg shadow-xl dark:shadow-gray-800">
+        <img src={@current_album.album.image_url} alt="Album Cover" class="bg-white py-5 rounded-lg shadow-xl dark:shadow-gray-800">
         </a></p>
         <h1 class="text-2xl pt-10 font-semibold"> Rating: <%= @rating %> </h1>
         <%= if @current_album.user do %>
