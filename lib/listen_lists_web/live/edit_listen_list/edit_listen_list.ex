@@ -104,4 +104,22 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
     {:noreply, socket |> assign(listen_list: ll) |> put_flash(:info, "List activated successfully!")}
   end
 
+  @impl true
+  def handle_event("rstart_list", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.start_list(params["id"])
+    {:noreply, socket |> put_flash(:info, "List started successfully!") |> assign(listen_list: ll)}
+  end
+
+  @impl true
+  def handle_event("pause_list", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.stop_list(params["id"])
+    {:noreply, socket |> put_flash(:info, "List paused successfully!") |> assign(listen_list: ll)}
+  end
+
+  @impl true
+  def handle_event("change_days", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.change_days_between_reveals(params["id"],String.to_integer(params["days_between"]))
+    {:noreply, socket |> put_flash(:info, "Days changed successfully!") |> assign(listen_list: ll)}
+  end
+
 end

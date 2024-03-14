@@ -162,4 +162,23 @@ defmodule ListenLists.ListenListss do
       select: l
     Repo.all(query)
   end
+
+  def start_list(ll_id) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(active: true)
+    |> Repo.update()
+  end
+
+  def stop_list(ll_id) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(active: false)
+    |> Repo.update()
+  end
+
+  def change_days_between_reveals(ll_id,days) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(days_between_reveals: days, days_till_reveal: days)
+    |> Repo.update()
+  end
+
 end
