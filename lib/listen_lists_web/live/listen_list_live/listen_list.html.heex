@@ -9,6 +9,11 @@
         <img src={@current_album.album.image_url} alt="Album Cover" class="py-5 rounded-lg shadow-xl dark:shadow-gray-800">
         </a></p>
         <h1 class="text-2xl pt-10 font-semibold"> Rating: <%= @rating %> </h1>
+        <%= if @current_album.user do %>
+        <a class="pt-2 block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: <%= @current_album.user.username %></a>
+        <% else %>
+        <a class="pt-2 block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: Anonymous</a>
+        <% end %>
     </div>
 
     <div class="pt-36 pb-12">

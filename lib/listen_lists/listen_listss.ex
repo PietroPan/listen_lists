@@ -68,7 +68,7 @@ defmodule ListenLists.ListenListss do
       from a in AlbumListenList,
       where: a.listen_list_id == ^ll_id and a.is_current_album,
       select: a,
-      preload: [:album]
+      preload: [:album, :user]
     current_album = Repo.one(query)
     case current_album do
       nil -> {:error, :no_album_revealed}

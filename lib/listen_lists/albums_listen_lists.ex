@@ -31,7 +31,7 @@ defmodule ListenLists.AlbumsListenLists do
       where: a.listen_list_id == ^ll_id,
       order_by: [desc: :inserted_at],
       select: a,
-      preload: [:album]
+      preload: [:album, :user]
     Repo.all(query)
   end
 

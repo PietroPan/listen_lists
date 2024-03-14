@@ -56,8 +56,14 @@
             </a></p>
             <div class="p-4 flex-grow">
                 <!-- Album Title (Link) -->
-                <a href={album.album.album_url} class="hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
-
+                <div class="flex justify-between">
+                    <a href={album.album.album_url} class="px-2 hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
+                    <%= if album.user do %>
+                    <a class="block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: <%= album.user.username %></a>
+                    <% else %>
+                    <a class="block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: Anonymous</a>
+                    <% end %>
+                </div>
                 <!-- Clear floats -->
                 <div class="clearfix"></div>
             </div>
@@ -71,8 +77,14 @@
 
             <div class="p-4 flex-grow">
                 <!-- Album Title (Link) -->
-                <a href={album.album.album_url} class="hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
-
+                <div class="flex justify-between">
+                    <a href={album.album.album_url} class="px-2 hover:underline block text-xl font-semibold text-gray-800 truncate text-center" title="Album Title"><%= album.album.name %></a>
+                    <%= if album.user do %>
+                    <a class="block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: <%= album.user.username %></a>
+                    <% else %>
+                    <a class="block text-base font-semibold text-gray-800 truncate text-center" title="Album Title">Sugested by: Anonymous</a>
+                    <% end %>
+                </div>
                 <!-- Minus Sign -->
                 <button phx-click="remove_album" phx-value-listen_list_id={@listen_list.id} phx-value-id={album.album.id} class="float-right bg-black hover:bg-zinc-700 rounded-full p-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white  cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">

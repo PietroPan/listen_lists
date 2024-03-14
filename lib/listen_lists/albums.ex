@@ -31,7 +31,7 @@ defmodule ListenLists.Albums do
     Repo.one(query)
   end
 
-  def add_to_listen_list(attrs \\ %{}, listen_list_id) do
+  def add_to_listen_list(attrs \\ %{}, listen_list_id, user_id) do
     if !check_if_spotify_id_exists(attrs.spotify_id) do
       create_album(attrs)
     end
@@ -42,7 +42,7 @@ defmodule ListenLists.Albums do
       AlbumsListenLists.check_if_album_belongs(album_id, listen_list_id) ->
         {:error, :album_already_added}
       true ->
-        {:ok, AlbumsListenLists.create_album_listen_list(%{album_id: album_id, listen_list_id: listen_list_id})}
+        {:ok, AlbumsListenLists.create_album_listen_list(%{album_id: album_id, listen_list_id: listen_list_id, user_id: user_id})}
     end
   end
 

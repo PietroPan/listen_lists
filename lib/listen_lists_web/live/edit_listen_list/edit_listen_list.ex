@@ -6,6 +6,7 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def mount(params, _session, socket) do
     ll = ListenLists.ListenListss.get_listen_list!(params["listen_list_id"])
     ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(ll.id)
+    Logger.debug "LLALBUM: #{inspect(ll_albums)}"
     socket =
       socket
       |> assign(form: to_form(%{}))
@@ -58,8 +59,9 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
 
   @impl true
   def handle_event("add_album", params, socket) do
+    %{current_user: user} = socket.assigns
     # Handle the search event here
-    socket = case ListenLists.Albums.add_to_listen_list(%{name: params["name"], image_url: params["image"], spotify_id: params["id"], album_url: params["url"]},params["listen_list_id"]) do
+    socket = case ListenLists.Albums.add_to_listen_list(%{name: params["name"], image_url: params["image"], spotify_id: params["id"], album_url: params["url"]},params["listen_list_id"],user.id) do
       {:ok, _} ->
         ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["listen_list_id"])
         socket |> put_flash(:info, "Album added successfully") |> stream(:ll_albums, ll_albums, reset: true)
