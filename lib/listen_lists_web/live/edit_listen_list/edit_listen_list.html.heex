@@ -41,7 +41,10 @@
     </div>
 </div>
 
-<h1 class="text-xl font-semibold my-5"> Albums in your List </h1>
+<div class="flex justify-between">
+    <h1 class="text-xl font-semibold my-5"> Albums in your List </h1>
+    <h1 class="text-xl font-semibold my-5"> Days until next reveal: <%= @listen_list.days_till_reveal %> </h1>
+</div>
 
 <div id="list_albums" phx-update="stream">
     <div :for={{dom_id, album} <- @streams.ll_albums} id={dom_id}>

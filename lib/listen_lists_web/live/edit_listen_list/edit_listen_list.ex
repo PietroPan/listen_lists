@@ -98,7 +98,8 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def handle_event("start_list", params, socket) do
     Logger.debug "Params: #{inspect(params)}"
     ListenLists.ListenListss.activate_listen_list(params["id"], String.to_integer(params["days_between"]), params["reveal_album"]=="true")
-    {:noreply, socket |> put_flash(:info, "List activated successfully!")}
+    ll = ListenLists.ListenListss.get_listen_list!(params["id"])
+    {:noreply, socket |> assign(listen_list: ll) |> put_flash(:info, "List activated successfully!")}
   end
 
 end
