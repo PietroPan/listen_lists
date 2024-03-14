@@ -6,7 +6,6 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def mount(params, _session, socket) do
     ll = ListenLists.ListenListss.get_listen_list!(params["listen_list_id"])
     ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(ll.id)
-    Logger.debug "LLALBUM: #{inspect(ll_albums)}"
     socket =
       socket
       |> assign(form: to_form(%{}))
@@ -22,7 +21,6 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def handle_event("search_album", %{"query" => query}, socket) do
     # Handle the search event here
     token = socket.assigns.token
-    Logger.debug "Query: #{query}"
     result = SpotifyApi.search_for_album(token,query)
     {:ok, token} = cond do
       token == "" -> SpotifyApi.get_access_token(System.get_env("SPOTIFY_CLIENT_ID"),System.get_env("SPOTIFY_CLIENT_SECRET"))
@@ -79,7 +77,7 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
 
   @impl true
   def handle_event("reveal_album", params, socket) do
-    r = ListenLists.ListenListss.reveal_next_album(params["id"])
+    r = ListenLists.ListenListss.reveal_next_album(params["id"],params["priority"]=="true")
     socket = case r do
       {:error, _} -> socket |> put_flash(:error, "No more albums to be revealed!")
       {:ok, _} -> socket |> put_flash(:info, "Next Album Revealed!")
@@ -98,14 +96,6 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
 
   @impl true
   def handle_event("start_list", params, socket) do
-    Logger.debug "Params: #{inspect(params)}"
-    ListenLists.ListenListss.activate_listen_list(params["id"], String.to_integer(params["days_between"]), params["reveal_album"]=="true")
-    ll = ListenLists.ListenListss.get_listen_list!(params["id"])
-    {:noreply, socket |> assign(listen_list: ll) |> put_flash(:info, "List activated successfully!")}
-  end
-
-  @impl true
-  def handle_event("rstart_list", params, socket) do
     {:ok, ll} = ListenLists.ListenListss.start_list(params["id"])
     {:noreply, socket |> put_flash(:info, "List started successfully!") |> assign(listen_list: ll)}
   end
@@ -120,6 +110,18 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   def handle_event("change_days", params, socket) do
     {:ok, ll} = ListenLists.ListenListss.change_days_between_reveals(params["id"],String.to_integer(params["days_between"]))
     {:noreply, socket |> put_flash(:info, "Days changed successfully!") |> assign(listen_list: ll)}
+  end
+
+  @impl true
+  def handle_event("reveal_to_random", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.toggle_priority(params["id"])
+    {:noreply, socket |> put_flash(:info, "Reveals are now random!") |> assign(listen_list: ll)}
+  end
+
+  @impl true
+  def handle_event("reveal_to_priority", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.toggle_priority(params["id"])
+    {:noreply, socket |> put_flash(:info, "Reveals are now based on user priority!") |> assign(listen_list: ll)}
   end
 
 end

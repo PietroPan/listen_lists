@@ -1,25 +1,23 @@
 <h1 class="text-xl font-semibold py-6"><%= @listen_list.name%>: Settings </h1>
-
-<.button hidden phx-click="restart_list" phx-value-id={@listen_list.id} >Restart Revealing</.button>
+<!--
+<.button phx-click="restart_list" phx-value-id={@listen_list.id} >Restart Revealing</.button>
+-->
 <.button phx-click={JS.navigate(~p"/listen_list/#{@listen_list.id}")} >Front Page</.button>
 
 <%= if @listen_list.active do %>
     <.button phx-click="pause_list" phx-value-id={@listen_list.id}> Pause List </.button>
 <% else %>
-    <.button phx-click="rstart_list" phx-value-id={@listen_list.id}> Start List</.button>
+    <.button phx-click="start_list" phx-value-id={@listen_list.id}> Start List</.button>
 <% end %>
 
-<.button phx-click="reveal_album" phx-value-id={@listen_list.id} >Reveal Next Album</.button>
+<%= if @listen_list.priority_reveal do %>
+    <.button phx-click="reveal_to_random" phx-value-id={@listen_list.id}> Reveal Mode: Random </.button>
+<% else %>
+    <.button phx-click="reveal_to_priority" phx-value-id={@listen_list.id}> Reveal Mode: Priority</.button>
+<% end %>
 
-<!--
-<.simple_form for={@form} phx-submit="start_list" phx-value-id={@listen_list.id}>
-    <div  class="flex items-center space-x-4 my-5">
-        <.input field={@form[:days_between]} type="number" min="1" step="1" placeholder="Days beetween reveals" class="flex" required/>
-        <.input field={@form[:reveal_album]} type="checkbox" label="Reveal first album now?"/>
-        <.button type="submit" phx-disable-with="Starting...">Start Revealing Albums</.button>
-    </div>
-</.simple_form>
--->
+
+<.button phx-click="reveal_album" phx-value-id={@listen_list.id} phx-value-priority={"#{@listen_list.priority_reveal}"} >Reveal Next Album</.button>
 
 <.simple_form for={@form} phx-submit="change_days" phx-value-id={@listen_list.id}>
     <div class="flex bg-amber-50">

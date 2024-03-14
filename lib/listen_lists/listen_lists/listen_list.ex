@@ -17,6 +17,7 @@ defmodule ListenLists.ListenLists.ListenList do
     field :days_till_reveal, :integer, default: 1
     field :days_between_reveals, :integer, default: 1
     field :current_album_id, :id
+    field :priority_reveal, :boolean, default: false
     many_to_many(:users, User, join_through: UsersListenLists, on_replace: :delete)
     many_to_many(:albums, Album, join_through: AlbumListenList, on_replace: :delete)
 

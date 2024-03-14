@@ -6,6 +6,7 @@ defmodule ListenLists.UsersListenLists do
 
   schema "users_listen_lists" do
 
+    field :priority, :integer, default: 1
     belongs_to :user, User, primary_key: true
     belongs_to :listen_list, ListenList, primary_key: true
 
