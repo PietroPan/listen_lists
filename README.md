@@ -1,6 +1,6 @@
 # ListenLists
 
-This is a website inspired by [1001 Albums Generator] (https://1001albumsgenerator.com/)
+This is a website inspired by [1001 Albums Generator](https://1001albumsgenerator.com/)
 
 ### Create a list alone or with your friends 
 
