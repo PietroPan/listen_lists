@@ -12,9 +12,18 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
       |> assign(token: "")
       |> assign(query: "")
       |> assign(listen_list: ll)
+      |> assign(reveal_mode: get_reveal_mode(ll.reveal_mode))
       |> stream(:ll_albums, ll_albums)
       |> stream(:albums, [])
     {:ok, socket}
+  end
+
+  def get_reveal_mode(reveal_mode) do
+    case reveal_mode do
+      0 -> "Random"
+      1 -> "Priority"
+      2 -> "Oldest First"
+    end
   end
 
   @impl true
@@ -77,7 +86,7 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
 
   @impl true
   def handle_event("reveal_album", params, socket) do
-    r = ListenLists.ListenListss.reveal_next_album(params["id"],params["priority"]=="true")
+    r = ListenLists.ListenListss.reveal_next_album(params["id"],params["mode"])
     socket = case r do
       {:error, _} -> socket |> put_flash(:error, "No more albums to be revealed!")
       {:ok, _} -> socket |> put_flash(:info, "Next Album Revealed!")
@@ -113,15 +122,14 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   end
 
   @impl true
-  def handle_event("reveal_to_random", params, socket) do
-    {:ok, ll} = ListenLists.ListenListss.toggle_priority(params["id"])
-    {:noreply, socket |> put_flash(:info, "Reveals are now random!") |> assign(listen_list: ll)}
+  def handle_event("change_reveal_mode", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.change_reveal_mode(params["id"],params["mode"])
+    {:noreply, socket |> put_flash(:info, "Reveal mode changed successfully!") |> assign(listen_list: ll) |> push_navigate(to: ~p"/listen_list/#{params["id"]}/edit")}
   end
 
   @impl true
-  def handle_event("reveal_to_priority", params, socket) do
-    {:ok, ll} = ListenLists.ListenListss.toggle_priority(params["id"])
-    {:noreply, socket |> put_flash(:info, "Reveals are now based on user priority!") |> assign(listen_list: ll)}
+  def handle_event("debug", params, socket) do
+    Logger.info "DEBUG: #{inspect(params)}"
+    {:noreply, socket}
   end
-
 end

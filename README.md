@@ -1,18 +1,23 @@
 # ListenLists
 
-To start your Phoenix server:
+This is a website inspired by [1001 Albums Generator] (https://1001albumsgenerator.com/)
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Create a list alone or with your friends 
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+![List](https://github.com/PietroPan/listen_lists(pictures/list))
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Add albums from the spotify API
 
-## Learn more
+![Search](https://github.com/PietroPan/listen_lists(pictures/search))
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+## Change the way albums are reveal (randomly, oldest first, swap between users)
+
+![Priority](https://github.com/PietroPan/listen_lists(pictures/priority))
+
+## Albums are revealed at midnight, you can choose the time interval between album reveals
+
+![Album](https://github.com/PietroPan/listen_lists(pictures/album))
+
+## Review the albums with your friends
+
+![Reviews](https://github.com/PietroPan/listen_lists(pictures/reviews))

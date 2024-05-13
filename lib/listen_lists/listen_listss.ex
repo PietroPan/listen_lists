@@ -77,7 +77,35 @@ defmodule ListenLists.ListenListss do
     end
   end
 
+  def oldest_reveal_next_album(ll_id) do
+    Logger.info "OLDEST"
+    query =
+      from a in AlbumListenList,
+      where: a.listen_list_id == ^ll_id and a.revealed == false,
+      select: a
+    albums = Repo.all(query)
+    case albums do
+      [] -> {:error, :no_more_albums_to_reveal}
+      _ ->
+        {_, current_album} = get_current_album(ll_id)
+        if current_album != :no_album_revealed do
+          current_album
+          |> Ecto.Changeset.change(is_current_album: false)
+          |> Repo.update()
+        end
+
+
+        album =
+          albums
+          |> Enum.min_by(fn x -> x.inserted_at end)
+          |> Ecto.Changeset.change(revealed: true, is_current_album: true)
+          |> Repo.update()
+        {:ok, album}
+    end
+  end
+
   def random_reveal_next_album(ll_id) do
+    Logger.info "RANDOM"
     query =
       from a in AlbumListenList,
       where: a.listen_list_id == ^ll_id and a.revealed == false,
@@ -102,10 +130,11 @@ defmodule ListenLists.ListenListss do
     end
   end
 
-  def reveal_next_album(ll_id, priority) do
-    cond do
-      priority -> priority_reveal_next_album(ll_id)
-      true -> random_reveal_next_album(ll_id)
+  def reveal_next_album(ll_id,reveal_mode) do
+    case reveal_mode do
+      "0" -> random_reveal_next_album(ll_id)
+      "1" -> priority_reveal_next_album(ll_id)
+      "2" -> oldest_reveal_next_album(ll_id)
     end
   end
 
@@ -122,6 +151,7 @@ defmodule ListenLists.ListenListss do
   end
 
   def priority_reveal_next_album(ll_id) do
+    Logger.info "PRIORITY"
     #Get Albums that weren't revealed yet
     query =
       from a in AlbumListenList,
@@ -238,7 +268,7 @@ defmodule ListenLists.ListenListss do
       n_days_till_reveal = list.days_till_reveal - 1
       changeset = cond do
         n_days_till_reveal == 0 ->
-          case reveal_next_album(list.id,list.priority_reveal) do
+          case reveal_next_album(list.id,Integer.to_string(list.reveal_mode)) do
             {:error, :no_more_albums_to_reveal} ->
               list
               |> Ecto.Changeset.change(days_till_reveal: list.days_between_reveals, active: false)
@@ -279,11 +309,14 @@ defmodule ListenLists.ListenListss do
     |> Repo.update()
   end
 
-  def toggle_priority(ll_id) do
+  def change_reveal_mode(ll_id,mode) do
     ll = get_listen_list!(ll_id)
-    ll
-    |> Ecto.Changeset.change(priority_reveal: !(ll.priority_reveal))
-    |> Repo.update()
+    ll = case mode do
+      "random" -> Ecto.Changeset.change(ll,reveal_mode: 0)
+      "priority" -> Ecto.Changeset.change(ll,reveal_mode: 1)
+      "oldest" -> Ecto.Changeset.change(ll,reveal_mode: 2)
+    end
+    Repo.update(ll)
   end
 
 end

@@ -17,7 +17,7 @@ defmodule ListenLists.ListenLists.ListenList do
     field :days_till_reveal, :integer, default: 1
     field :days_between_reveals, :integer, default: 1
     field :current_album_id, :id
-    field :priority_reveal, :boolean, default: false
+    field :reveal_mode, :integer, default: 0
     many_to_many(:users, User, join_through: UsersListenLists, on_replace: :delete)
     many_to_many(:albums, Album, join_through: AlbumListenList, on_replace: :delete)
 
@@ -28,7 +28,7 @@ defmodule ListenLists.ListenLists.ListenList do
   @doc false
   def changeset(listen_list, attrs) do
     listen_list
-    |> cast(attrs, [:name, :image_path, :description, :password, :active, :reveal_interval, :reveal_date, :current_album_id, :days_till_reveal, :days_between_reveals])
+    |> cast(attrs, [:name, :image_path, :description, :password, :active, :reveal_interval, :reveal_date, :current_album_id, :days_till_reveal, :days_between_reveals, :reveal_mode])
     |> validate_required([:name, :description, :password])
     |> foreign_key_constraint(:current_album_id, [name: :listen_lists_current_album_id_fkey])
   end

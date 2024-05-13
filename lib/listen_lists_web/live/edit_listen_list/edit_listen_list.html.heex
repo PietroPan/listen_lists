@@ -10,14 +10,27 @@
     <.button phx-click="start_list" phx-value-id={@listen_list.id}> Start List</.button>
 <% end %>
 
-<%= if @listen_list.priority_reveal do %>
-    <.button phx-click="reveal_to_random" phx-value-id={@listen_list.id}> Reveal Mode: Random </.button>
-<% else %>
-    <.button phx-click="reveal_to_priority" phx-value-id={@listen_list.id}> Reveal Mode: Priority</.button>
-<% end %>
+<.button type="button" phx-click={show_modal("reveal-mode")}>Change Reveal Mode (<%= @reveal_mode %>)</.button>
 
+<.modal id="reveal-mode">
+    <.simple_form for={@form} phx-submit="change_reveal_mode" phx-value-id={@listen_list.id}>
+        <div class="flex items-center">
+            <input type="radio" id="random" name="mode" value="random" class=""/>
+            <label for="random" class="ms-2">Random</label><br>
+        </div>
+        <div class="flex items-center">
+            <input type="radio" id="priority" name="mode" value="priority"/>
+            <label for="priority" class="ms-2">Priority</label><br>
+        </div>
+        <div class="flex items-center">
+            <input type="radio" id="oldest" name="mode" value="oldest"/>
+            <label for="oldest" class="ms-2">Oldest First</label><br>
+        </div>
+        <.button type="submit" phx-disable-with="Updating...">Change Reveal Mode</.button>
+    </.simple_form>
+</.modal>
 
-<.button phx-click="reveal_album" phx-value-id={@listen_list.id} phx-value-priority={"#{@listen_list.priority_reveal}"} >Reveal Next Album</.button>
+<.button phx-click="reveal_album" phx-value-id={@listen_list.id} phx-value-mode={"#{@listen_list.reveal_mode}"} >Reveal Next Album</.button>
 
 <.simple_form for={@form} phx-submit="change_days" phx-value-id={@listen_list.id}>
     <div class="flex bg-amber-50">
