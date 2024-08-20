@@ -32,6 +32,17 @@
 
 <.button phx-click="reveal_album" phx-value-id={@listen_list.id} phx-value-mode={"#{@listen_list.reveal_mode}"} >Reveal Next Album</.button>
 
+<.button type="button" phx-click={show_modal("custom_album")}></.button>
+
+<.modal id="custom_album">
+    <.simple_form for={@form} phx-submit="add_custom_album">
+        <.input field={@form[:name]} type="text" label="Name" required/>
+        <.input field={@form[:url]} type="text" label="Album Url" required/>
+        <.input field={@form[:image]} type="text" label="Image Url" required/>
+        <.button type="submit" phx-disable-with="Saving ...">Add Custom Album</.button>
+    </.simple_form>
+</.modal>
+
 <.simple_form for={@form} phx-submit="change_days" phx-value-id={@listen_list.id}>
     <div class="flex bg-amber-50">
         <.input class="w-2" field={@form[:days_between]} type="number" min="1" step="1" placeholder="1 = everday" required/>

@@ -78,6 +78,20 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
   end
 
   @impl true
+  def handle_event("add_custom_album", params, socket) do
+    %{current_user: user} = socket.assigns
+    ll_id = socket.assigns.listen_list.id
+    album_id = "custom" <> params["name"]
+    socket = case ListenLists.Albums.add_to_listen_list(%{name: params["name"], image_url: params["image"], spotify_id: album_id, album_url: params["url"]}, ll_id ,user.id) do
+      {:ok, _} ->
+        ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(ll_id)
+        socket |> put_flash(:info, "Album added successfully") |> stream(:ll_albums, ll_albums, reset: true)
+      {:error, :album_already_added} -> socket |> put_flash(:error, "The album is already in the list")
+    end
+    {:noreply, socket |> push_navigate(to: ~p"/listen_list/#{ll_id}/edit")}
+  end
+
+  @impl true
   def handle_event("remove_album", params, socket) do
     ListenLists.AlbumsListenLists.delete_album_listen_list(params["id"],params["listen_list_id"])
     ll_albums = ListenLists.AlbumsListenLists.get_albums_of_list(params["listen_list_id"])
