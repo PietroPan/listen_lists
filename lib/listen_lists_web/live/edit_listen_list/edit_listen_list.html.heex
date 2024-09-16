@@ -32,6 +32,16 @@
 
 <.button phx-click="reveal_album" phx-value-id={@listen_list.id} phx-value-mode={"#{@listen_list.reveal_mode}"} >Reveal Next Album</.button>
 
+<div class="py-2">
+<.button type="button" phx-click={show_modal("edit_settings")}> Edit Settings </.button>
+<.modal id="edit_settings">
+    <.simple_form for={@form} phx-submit="change_settings" phx-value-id={@listen_list.id}>
+        <.input field={@form[:name]} type="text" label="Name" value={@listen_list.name} required/>
+        <.input field={@form[:description]} type="text" label="Description" value={@listen_list.description} required/>
+        <.button type="submit" phx-disable-with="Saving ...">Change Settings</.button>
+    </.simple_form>
+</.modal>
+
 <.button type="button" phx-click={show_modal("custom_album")}></.button>
 
 <.modal id="custom_album">
@@ -42,6 +52,8 @@
         <.button type="submit" phx-disable-with="Saving ...">Add Custom Album</.button>
     </.simple_form>
 </.modal>
+
+</div>
 
 <.simple_form for={@form} phx-submit="change_days" phx-value-id={@listen_list.id}>
     <div class="flex bg-amber-50">

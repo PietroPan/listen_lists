@@ -146,4 +146,10 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
     Logger.info "DEBUG: #{inspect(params)}"
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("change_settings", params, socket) do
+    {:ok, ll} = ListenLists.ListenListss.change_name_and_desc(params["id"],params["name"],params["description"])
+    {:noreply, socket |> put_flash(:info, "Settings changed successfully!") |> assign(listen_list: ll) |> push_navigate(to: ~p"/listen_list/#{params["id"]}/edit")}
+  end
 end

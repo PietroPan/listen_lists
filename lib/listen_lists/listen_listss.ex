@@ -319,4 +319,10 @@ defmodule ListenLists.ListenListss do
     Repo.update(ll)
   end
 
+  def change_name_and_desc(ll_id,name,desc) do
+    get_listen_list!(ll_id)
+    |> Ecto.Changeset.change(name: name, description: desc)
+    |> Repo.update()
+  end
+
 end
