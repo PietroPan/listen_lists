@@ -131,7 +131,7 @@ defmodule ListenListsWeb.EditListenListLive.EditListenList do
 
   @impl true
   def handle_event("change_days", params, socket) do
-    {:ok, ll} = ListenLists.ListenListss.change_days_between_reveals(params["id"],String.to_integer(params["days_between"]))
+    {:ok, ll} = ListenLists.ListenListss.change_days_between_reveals(params["id"],params["days_between"])
     {:noreply, socket |> put_flash(:info, "Days changed successfully!") |> assign(listen_list: ll)}
   end
 

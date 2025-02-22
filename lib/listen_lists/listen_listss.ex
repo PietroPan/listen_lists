@@ -268,13 +268,15 @@ defmodule ListenLists.ListenListss do
       n_days_till_reveal = list.days_till_reveal - 1
       changeset = cond do
         n_days_till_reveal == 0 ->
+          n_days_till_reveal_i = rem(list.days_between_reveals_i + 1, length(list.days_between_reveals))
+          n_days_between_reveals = Enum.at(list.days_between_reveals,n_days_till_reveal_i)
           case reveal_next_album(list.id,Integer.to_string(list.reveal_mode)) do
             {:error, :no_more_albums_to_reveal} ->
               list
-              |> Ecto.Changeset.change(days_till_reveal: list.days_between_reveals, active: false)
+              |> Ecto.Changeset.change(days_till_reveal: n_days_between_reveals, days_between_reveals_i: n_days_till_reveal_i, active: false)
             _ ->
               list
-              |> Ecto.Changeset.change(days_till_reveal: list.days_between_reveals)
+              |> Ecto.Changeset.change(days_till_reveal: n_days_between_reveals, days_between_reveals_i: n_days_till_reveal_i)
           end
         true ->
           list
@@ -304,8 +306,13 @@ defmodule ListenLists.ListenListss do
   end
 
   def change_days_between_reveals(ll_id,days) do
+    days_list =
+      days
+      |> String.split(",")
+      |> Enum.map(&String.to_integer/1)
+    Logger.debug "DAYS_LIST: #{inspect(days_list)}"
     get_listen_list!(ll_id)
-    |> Ecto.Changeset.change(days_between_reveals: days, days_till_reveal: days)
+    |> Ecto.Changeset.change(days_between_reveals: days_list, days_till_reveal: hd(days_list), days_between_reveals_i: 0)
     |> Repo.update()
   end
 
