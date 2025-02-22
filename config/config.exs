@@ -66,7 +66,7 @@ import_config "#{config_env()}.exs"
 
 config :listen_lists, ListenLists.Scheduler,
   jobs: [
-    # Every minute
-    #{{:extended, "* * * * *"}, {ListenLists.ListenListss, :reveal_albums, []}},
+    # Every 10 seconds
+    # {{:extended, "*/10 * * * *"}, {ListenLists.ListenListss, :reveal_albums, []}},
     {"@daily", {ListenLists.ListenListss, :reveal_albums, []}}
   ]
